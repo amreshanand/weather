@@ -4,6 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Weather Scenery</title>
+ <link rel="icon" type="image/png" href="file_00000000387461f7a8e572aa3e093968.png">
   <meta name="google-site-verification" content="Bh8LUCvHzdg_qnbVyH6O-anLSp1i44U81AfH4AnfwnQ" />
   <style>
     html,body{
@@ -731,7 +732,7 @@
     const arc = Math.sin(t * Math.PI);
     const y = 0.05 * window.innerHeight + (1 - arc) * 0.01 * window.innerHeight * 0.7;
 
-    if (nightBlend < 0.99) drawSun(x, y, Math.max(15, Math.min(80, window.innerWidth * 0.06)));
+    if (nightBlend < 0.99) drawSun(x, y, Math.max(10, Math.min(70, window.innerWidth * 0.05)));
     if (nightBlend > 0.01) drawMoon(x, y, Math.max(10, Math.min(70, window.innerWidth * 0.05)));
   }
 
