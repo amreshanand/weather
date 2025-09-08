@@ -30,5 +30,5 @@
 
 
 
-⚡ A fun project to visualize live weather in an artistic way, right in your browser.
+⚡ A fun project to visualize live weather in an artistic way, right in your browser.<br>
 🙏 Thanks for being here. Have a great day.
