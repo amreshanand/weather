@@ -759,22 +759,42 @@
     ctx.restore();
   }
 
-  function drawMoon(cx, cy, r){
+  function drawMoon(cx, cy, r) {
     ctx.save();
     ctx.globalAlpha = nightBlend;
-    const g = ctx.createRadialGradient(cx - r * 0.2, cy - r * 0.15, r * 0.1, cx, cy, r);
-    g.addColorStop(0, '#ffffff'); g.addColorStop(1, '#cfcfd1');
-    ctx.fillStyle = g; ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.fill();
 
     const p = Math.max(0, Math.min(1, moonPhase));
-    if (Math.abs(p - 0.5) > 0.01) {
-      const offset = (p - 0.5) * 2 * r * 0.9;
-      ctx.globalCompositeOperation = 'destination-out';
-      ctx.beginPath();
-      ctx.arc(cx + offset, cy, r * 0.95, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.globalCompositeOperation = 'source-over';
-    }
+    const baseGrad = ctx.createRadialGradient(cx - r * 0.18, cy - r * 0.12, r * 0.06, cx, cy, r);
+    baseGrad.addColorStop(0, '#ffffff');
+    baseGrad.addColorStop(1, '#cfcfd1');
+    ctx.fillStyle = baseGrad;
+    ctx.beginPath();
+    ctx.arc(cx, cy, r, 0, Math.PI * 2);
+    ctx.fill();
+
+    const L = 0.5 * (1 - Math.cos(2 * Math.PI * p));
+    const side = (p <= 0.5) ? 1 : -1;
+
+    const maxOffset = r * 2.2;
+     const maskOffset = L * maxOffset;
+
+    function getSkyColorApprox() {
+      if (mode === 'thunder') return '#151922';
+      if (mode === 'rain')    return '#151922';
+      if (mode === 'snow')    return '#E6F2FF';
+      if (mode === 'cloudy')  return isNight ? '#1E2633' : '#BBD2E1';
+      // clear
+      return isNight ? '#0b1020' : '#87CEEB';
+   }
+    const skyColor = getSkyColorApprox();
+
+    ctx.fillStyle = skyColor;
+    ctx.beginPath();
+    const maskR = r * 1.02;
+    ctx.arc(cx + side * maskOffset, cy, maskR, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.restore();
   }
 
   function drawClouds(nowMs){
