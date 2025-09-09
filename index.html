@@ -187,21 +187,160 @@
             <input id="cityInput" type="text" placeholder="Enter city (e.g. Tokyo)" aria-label="City name" style="width: 15vw;"/>
             <button id="cityBtn" title="Fetch weather">Go</button>
           </div>
+.weather-ui input[type="text"]{
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: inherit;
+      padding: 6px 8px;
+      border-radius: 8px;
+      width: 140px;
+      outline: none;
+      font-size: 3vw;
+    }
+    .weather-ui button {
+      background: rgba(0,0,0,0.5);
+      color: #fff;
+      border: 0;
+      padding: 6px 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 1rem;
+    }
+    
+    .weather-ui {
+      width: 90vw;
+      display: flex;
+      gap:1rem;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 8px 12px;
+      left: 2.5vw;
+      border-radius: 10px;
+      font-size: 3vw;
+      height: 11vh;
+    }
+
+    .weather-stats {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-width: 140px;
+      flex-grow: 1;
+      color: #fff;
+      opacity: 0.95;
+      font-size: 3vw;
+      
+    }
+
+    .details-wrapper {
+      display: flex;
+      flex-direction: row;
+      gap: 16px;
+    }
+    .weather-ui .right-panel {
+      width: 100%;
+      height: 11vh;
+      display: flex;
+      gap:6px;
+    }
+    .weather-ui .input-row {
+      display:flex;
+      align-items:center;
+      gap:8px;
+      bottom: 0px;
+    }
+
+    .weather-stats .loc {
+       font-size: 8vw;
+       height: fit-content;}
+    .weather-stats .val {
+      font-weight:600;
+    }
+    .weather-ui .small {
+      font-size:3.2vw; 
+      color:#ddd; 
+    }
+    #cover{
+      position: absolute;
+      bottom: 8vh;
+      width: 100vw;
+      z-index: 3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    #inside-right-panel{
+        display:block;
+        align-self: flex-end;
+        height: fit-content;
+    }
+  </style>
+</head>
+<body class="theme-clear-day">
+  <div class="app">
+    <canvas id="scene" aria-hidden="true"></canvas>
+    <div id="flash" class="flash" aria-hidden="true"></div>
+    <div class="ground-strip" aria-hidden="true"></div>
+   <div id="cover">
+     <div class="weather-ui" id="weatherUI" role="region" aria-label="Weather controls">
+       <div class="weather-stats" id="weatherStats" aria-live="polite">
+         <div class="loc" id="statLocation" style="">Loading...</div>
+         <div class="details-wrapper">
+           <div id="box1">
+             <div>
+               <span class="small">Temp</span> 
+               <span class="val" id="statTemp">--°C</span>
+             </div>
+             <div>
+               <span class="small">Pressure</span>
+               <span class="val" id="statPressure">--hPa</span>
+             </div>
+             <div>
+               <span class="small">Humidity</span>
+               <span class="val" id="statHumidity">--%</span>
+             </div>
+           </div>
+           <div id="box2">
+              <div>
+                <span class="small">Wind</span> <span class="val" id="statWind">--km/h
+                </span>
+              </div>
+              <div>
+                <span class="small">Precipitation</span> <span class="val" id="statPerp">--mm/3hs
+                </span>
+              </div>
+              <div>
+                <span class="small">UV Index(1-12)</span> <span class="val" id="statUV">--
+                </span>
+              </div>
+            </div>
+          </div>
         </div>
         <div>
-          <span class="small">Time</span> <span class="val" id="statTime" style="color: #fff">--:--:--</span>
-        </div>
-        <div style="display: flex; justify-content: right;">
-          <span class="val" id="Helpers" style="color: #fff; font-size: 2vw;">
+          <div class="right-panel">
+            <div id="inside-right-panel">
+              <div>
+               <span class="small" style="font-size:4vw;">Time</span> <span class="val" style="font-size:4vw;color: #fff;" id="statTime">--:--:--</span>
+             </div>
+             <div class="input-row">
+            <input id="cityInput" type="text" placeholder="Enter city (e.g. Tokyo)" aria-label="City name" style="width: 15vw;"/>
+               <button id="cityBtn" title="Fetch weather">Go</button>
+             </div>
+             <div style="display: flex; justify-content: right; margin-top: 5px;">
+               <span class="val" id="Helpers" style="color: #fff; font-size: 2vw;">
               with wttr.in & ipapi.co
-          </span>
-        </div>
-      </div>
-    </div>
+               </span>
+             </div>
+           </div>
+         </div>
+       </div>
+     </div>
+   </div>
   </div>
 </div>
 
-  <script>
+<script>
   // Pain starts
   const WTTR_BASE = 'https://wttr.in';
   const WTTR_FORMAT = '%l|%C|%t|%h|%P|%w|%p|%S|%s|%T|%m|%M|%Z|%f|%u';
