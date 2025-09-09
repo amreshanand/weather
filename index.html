@@ -21,7 +21,7 @@
     body.theme-cloudy-day { background: linear-gradient(180deg, #BBD2E1 0%, #E6EEF3 100%); }
     body.theme-cloudy-night { background: linear-gradient(180deg, #1E2633 0%, #3b3f4b 100%); }
     body.theme-rain-day { background: linear-gradient(180deg, #6E90A8 0%, #9FB6C8 100%); }
-    body.theme-rain-night { background: linear-gradient(180deg, #151922 0%, #364153 100%); }
+    body.theme-rain-night { background: linear-gradient(180deg, #151922 0%, #364153 100%); 
     body.theme-snow { background: linear-gradient(180deg, #E6F2FF 0%, #FFFFFF 100%); }
     body.theme-thunder { background: linear-gradient(180deg, #22303b 0%, #1e2630 100%); }
 
@@ -60,134 +60,7 @@
       z-index: 1;
       background: transparent;
     }
-    
     .weather-ui input[type="text"]{
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.08);
-      color: inherit;
-      padding: 6px 8px;
-      border-radius: 8px;
-      width: 140px;
-      outline: none;
-      font-size: 3vw;
-    }
-    .weather-ui button {
-      background: rgba(0,0,0,0.5);
-      color: #fff;
-      border: 0;
-      padding: 6px 10px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: 600;
-      font-size: 13px;
-    }
-    
-    .weather-ui {
-      position: absolute;
-      top: 76vh;
-      width: 90vw;
-      z-index: 3;
-      display: flex;
-      gap:1rem;
-      justify-content: space-between;
-      align-items: flex-start;
-      padding: 8px 12px;
-      border-radius: 10px;
-      font-size: 14px;
-      height: auto;
-    }
-
-    .weather-stats {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      min-width: 140px;
-      color: #fff;
-      opacity: 0.95;
-      font-size: 13px;
-      flex-grow: 1;
-    }
-
-    .details-wrapper {
-      display: flex;
-      flex-direction: row;
-      gap: 16px;
-    }
-    .weather-ui .right-panel {
-      align-self: stretch;
-      display:flex;
-      flex-direction:column;
-      justify-content:flex-end;
-      gap:6px;
-      align-items:flex-end;
-      margin-top: 3rem;
-     margin-bottom: 0px;
-    }
-    .weather-ui .input-row {
-      display:flex;
-      align-items:center;
-      gap:8px;
-    }
-
-
-    .weather-stats .loc {
-       font-size: 8vw;
-       height: fit-content;}
-    .weather-stats .val {
-      font-weight:600;
-    }
-    .weather-ui .small {
-      font-size:2vw; 
-      color:#ddd; 
-    }
-  </style>
-</head>
-<body class="theme-clear-day">
-  <div class="app">
-    <canvas id="scene" aria-hidden="true"></canvas>
-    <div id="flash" class="flash" aria-hidden="true"></div>
-    <div class="ground-strip" aria-hidden="true"></div>
-    <div class="weather-ui" id="weatherUI" role="region" aria-label="Weather controls">
-      <div class="weather-stats" id="weatherStats" aria-live="polite">
-        <div class="loc" id="statLocation" style="">Loading...</div>
-        <div class="details-wrapper">
-          <div id="box1">
-            <div>
-              <span class="small">Temp</span> 
-              <span class="val" id="statTemp">--°C</span>
-            </div>
-            <div>
-              <span class="small">Pressure</span>
-              <span class="val" id="statPressure">--hPa</span>
-            </div>
-            <div>
-              <span class="small">Humidity</span>
-              <span class="val" id="statHumidity">--%</span>
-            </div>
-          </div>
-          <div id="box2">
-            <div>
-              <span class="small">Wind</span> <span class="val" id="statWind">--km/h
-              </span>
-            </div>
-            <div>
-              <span class="small">Precipitation</span> <span class="val" id="statPerp">--mm/3hs
-              </span>
-            </div>
-            <div>
-              <span class="small">UV Index(1-12)</span> <span class="val" id="statUV">--
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div>
-        <div class="right-panel">
-          <div class="input-row">
-            <input id="cityInput" type="text" placeholder="Enter city (e.g. Tokyo)" aria-label="City name" style="width: 15vw;"/>
-            <button id="cityBtn" title="Fetch weather">Go</button>
-          </div>
-.weather-ui input[type="text"]{
       background: rgba(255,255,255,0.06);
       border: 1px solid rgba(255,255,255,0.08);
       color: inherit;
