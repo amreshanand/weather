@@ -679,7 +679,7 @@
       if (b.alpha > 0.02) {
         ctx.save();
         ctx.translate(b.x, b.y);
-        const dir = b.vx >= 0 ? 1 : -1;
+        const dir = b.vx >= 0 ? -1 : 1;
         ctx.scale(dir, 1);
         ctx.globalAlpha = b.alpha;
         ctx.lineWidth = Math.max(1, b.size * 0.11);
