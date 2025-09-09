@@ -655,7 +655,8 @@
       const follower = spawnBird('flock');
       const offsetX = (i + 1) * (leader.vx > 0 ? -18 : 18);
       follower.x = leader.x + offsetX + (Math.random() * 8 - 4);
-      follower.y = leader.y + (Math.randomfunction updateAndDrawBirds(dt, nowMs, starVisibleFactor){
+      follower.y = leader.y + (Math.random
+  function updateAndDrawBirds(dt, nowMs, starVisibleFactor){
   if (!birds) return;
   const dayFactor = Math.max(0, 1 - nightBlend);
   const clearFactor = Math.max(0, 1 - cloudCover);
@@ -702,6 +703,121 @@
       ctx.lineWidth = Math.max(1, b.size * 0.11);
 
       ctx.strokeStyle = `rgba(${grey},${grey},${grey},${(0.95).toFixed(2)})`;
+// birds: day-time flying
+  function spawnBird(flock = null){
+    const depth = Math.random();
+    // size correlates with depth
+    const size = 6 + depth * 18;
+    // speed correlates with depth (near birds fly faster)
+    const baseSpeed = 45; // min speed
+    const speed = baseSpeed + depth * 200 * (0.8 + Math.random() * 0.4);
+    // flap speed inverse with depth: smaller birds flap faster
+    const flapSpeed = 10 + (1 - depth) * 12 + Math.random() * 4;
+    // starting side
+    const fromLeft = Math.random() < 0.6;
+    const startX = fromLeft ? -60 - Math.random() * 120 : window.innerWidth + 60 + Math.random() * 120;
+    // altitude: nearer birds tend to fly a bit lower
+    const skyTop = 40;
+    const skyBottom = Math.max(60, window.innerHeight * 0.45);
+    // bias altitude: far birds higher, near birds lower
+    const y = skyTop + (1 - depth) * (skyBottom * 0.7) + Math.random() * (skyBottom * 0.3);
+    // slight vertical drift
+    const vy = (Math.random() - 0.5) * 8;
+    const vx = (fromLeft ? 1 : -1) * speed;
+    const ttl = 3000 + 3000 * (0.6 + depth); 
+    const alphaBase = 0.45 + depth * 0.6; 
+    const b = {
+      x: startX,
+      y,
+      vx, vy,
+      size,
+      wingPhase: Math.random() * Math.PI * 2,
+      flapSpeed,
+      alpha: Math.min(1, alphaBase),
+      life: ttl,
+      ttl,
+      flockId: flock,
+      depth
+    };
+    birds.push(b);
+    return b;
+  }
+  function spawnFlock(count = 3){
+    const leader = spawnBird('flock');
+    leader.vx *= 1.05;
+    for (let i = 0; i < count - 1; i++){
+      const follower = spawnBird('flock');
+      const offsetX = (i + 1) * (leader.vx > 0 ? -18 : 18);
+      follower.x = leader.x + offsetX + (Math.random() * 8 - 4);
+      follower.y = leader.y + (Math.random() * 18 - 8);
+      follower.vx = leader.vx * (0.92 + Math.random() * 0.14);
+      follower.vy = leader.vy + (Math.random() * 6 - 3);
+      follower.size = Math.max(5, leader.size * (0.85 + (Math.random() * 0.2 - 0.05)));
+      follower.depth = Math.max(0, Math.min(1, follower.depth - 0.08));
+      follower.flapSpeed *= 0.95 + Math.random() * 0.08;
+    }
+  }
+
+  function updateAndDrawBirds(dt, nowMs, starVisibleFactor){
+  if (!birds) return;
+  // daytime factor (1 = day, 0 = night)
+  const dayFactor = Math.max(0, 1 - nightBlend);
+  // clearFactor: 1 = clear, 0 = overcast
+  const clearFactor = Math.max(0, 1 - cloudCover);
+
+  // spawn probability: allow some spawning even in cloudy/hazy weather
+  // hazeSpawnFactor ensures there's a baseline chance during cloud cover
+  const hazeSpawnFactor = 0.25 + 0.75 * clearFactor; // 0.25..1.0
+  const spawnPerSecond = 0.45; // base birds/sec (single or flocks)
+  const spawnProb = spawnPerSecond * dayFactor * hazeSpawnFactor * (dt / 1000);
+  if (Math.random() < spawnProb) {
+    if (Math.random() < 0.18) spawnFlock(2 + Math.floor(Math.random() * 3));
+    else spawnBird();
+  }
+
+  // limit birds so it doesn't get out of hand
+  const maxBirds = Math.floor(window.innerWidth / 220 * (1-cloudCover));
+  if (birds.length > maxBirds) birds.splice(0, birds.length - maxBirds);
+
+  // update & draw
+  ctx.save();
+  for (let i = birds.length - 1; i >= 0; i--){
+    const b = birds[i];
+    const dtSec = dt / 1000;
+    b.x += b.vx * dtSec;
+    b.y += b.vy * dtSec;
+    b.life -= dt;
+    b.wingPhase += dtSec * b.flapSpeed;
+
+    // base alpha before fog/haze
+    const baseAlpha = (0.35 + b.depth * 0.65) * Math.max(0.15, dayFactor * clearFactor);
+    // modulate with flap so wings look lively
+    b.alpha = Math.max(0, Math.min(1, baseAlpha * (0.6 + Math.abs(Math.sin(b.wingPhase)) * 0.4)));
+
+    // fog/haze factor driven by cloudCover (0..1)
+    const fog = Math.max(0, Math.min(1, cloudCover));
+    // alpha multiplier reduces contrast in fog (up to 70% fade at heavy cloud cover)
+    const alphaMultiplier = 1 - fog * 0.7;
+
+    // color lightens in fog (30..100)
+    const grey = Math.round(30 + fog * 70);
+
+    if (b.alpha > 0.02) {
+      ctx.save();
+      ctx.translate(b.x, b.y);
+      // dir flip: positive vx (moving right) should face right
+      const dir = b.vx >= 0 ? -1 : 1;
+      ctx.scale(dir, 1);
+
+      // final alpha for stroke
+      const finalAlpha = Math.max(0, Math.min(1, b.alpha * alphaMultiplier));
+
+      // stroke becomes lighter and more transparent in fog
+      ctx.globalAlpha = finalAlpha;
+      ctx.lineWidth = Math.max(1, b.size * 0.11);
+
+      // stroke color uses the fog-lightened grey
+      ctx.strokeStyle = `rgba(${grey},${grey},${grey},${(0.95).toFixed(2)})`;
 
       const flap = Math.sin(b.wingPhase) * 0.7;
       ctx.beginPath();
@@ -713,8 +829,9 @@
       ctx.quadraticCurveTo(-b.size * 0.3, b.size * 0.62 * (0.5 + 0.6 * -flap * (0.6 + b.depth*0.4)), b.size * 0.22, b.size * 0.18);
       ctx.stroke();
 
+      // optional faint body to suggest silhouette in heavy fog
       if (fog > 0.6) {
-        ctx.globalAlpha = finalAlpha * 0.35;
+        ctx.globalAlpha = finalAlpha * 0.35; // very subtle
         ctx.fillStyle = `rgba(${Math.min(255, grey+40)},${Math.min(255, grey+40)},${Math.min(255, grey+40)},${0.18})`;
         ctx.beginPath();
         ctx.arc(0, 0, Math.max(1, b.size * 0.18), 0, Math.PI * 2);
@@ -730,14 +847,8 @@
     }
   }
   ctx.restore();
-      }() * 18 - 8);
-      follower.vx = leader.vx * (0.92 + Math.random() * 0.14);
-      follower.vy = leader.vy + (Math.random() * 6 - 3);
-      follower.size = Math.max(5, leader.size * (0.85 + (Math.random() * 0.2 - 0.05)));
-      follower.depth = Math.max(0, Math.min(1, follower.depth - 0.08));
-      follower.flapSpeed *= 0.95 + Math.random() * 0.08;
-    }
-  }
+        }
+      
 
   
 
