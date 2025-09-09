@@ -152,64 +152,65 @@
 </head>
 <body class="theme-clear-day">
   <div class="app">
-    <canvas id="scene" aria-hidden="true"></canvas>
-    <div id="flash" class="flash" aria-hidden="true"></div>
-    <div class="ground-strip" aria-hidden="true"></div>
-   <div id="cover">
-     <div class="weather-ui" id="weatherUI" role="region" aria-label="Weather controls">
-       <div class="weather-stats" id="weatherStats" aria-live="polite">
-         <div class="loc" id="statLocation" style="">Loading...</div>
-         <div class="details-wrapper">
-           <div id="box1">
-             <div>
-               <span class="small">Temp</span> 
-               <span class="val" id="statTemp">--°C</span>
-             </div>
-             <div>
-               <span class="small">Pressure</span>
-               <span class="val" id="statPressure">--hPa</span>
-             </div>
-             <div>
-               <span class="small">Humidity</span>
-               <span class="val" id="statHumidity">--%</span>
-             </div>
-           </div>
-           <div id="box2">
-              <div>
-                <span class="small">Wind</span> <span class="val" id="statWind">--km/h
-                </span>
-              </div>
-              <div>
-                <span class="small">Precipitation</span> <span class="val" id="statPerp">--mm/3hs
-                </span>
-              </div>
-              <div>
-                <span class="small">UV Index(1-12)</span> <span class="val" id="statUV">--
-                </span>
-              </div>
+  <canvas id="scene" aria-hidden="true"></canvas>
+  <div id="flash" class="flash" aria-hidden="true"></div>
+  <div class="ground-strip" aria-hidden="true"></div>
+
+  <div id="cover">
+    <div class="weather-ui" id="weatherUI" role="region" aria-label="Weather controls">
+      <div class="weather-stats" id="weatherStats" aria-live="polite">
+        <div class="loc" id="statLocation" style="">Loading...</div>
+        <div class="details-wrapper">
+          <div id="box1">
+            <div>
+              <span class="small">Temp</span>
+              <span class="val" id="statTemp">--°C(--°C)</span>
+            </div>
+            <div>
+              <span class="small">Pressure</span>
+              <span class="val" id="statPressure">--hPa</span>
+            </div>
+            <div>
+              <span class="small">Humidity</span>
+              <span class="val" id="statHumidity">--%</span>
+            </div>
+          </div>
+          <div id="box2">
+            <div>
+              <span class="small">Wind</span> <span class="val" id="statWind">--km/h</span>
+            </div>
+            <div>
+              <span class="small">Precipitation</span> <span class="val" id="statPerp">--mm/3hs</span>
+            </div>
+            <div>
+              <span class="small">UV Index(1-12)</span> <span class="val" id="statUV">--</span>
             </div>
           </div>
         </div>
-        <div>
-          <div class="right-panel">
-            <div id="inside-right-panel">
-              <div>
-               <span class="small" style="font-size:4vw;">Time</span> <span class="val" style="font-size:4vw;color: #fff;" id="statTime">--:--:--</span>
-             </div>
-             <div class="input-row">
-            <input id="cityInput" type="text" placeholder="Enter city (e.g. Tokyo)" aria-label="City name" style="width: 15vw;"/>
-               <button id="cityBtn" title="Fetch weather">Go</button>
-             </div>
-             <div style="display: flex; justify-content: right; margin-top: 5px;">
-               <span class="val" id="Helpers" style="color: #fff; font-size: 2vw;">
-              with wttr.in & ipapi.co
-               </span>
-             </div>
-           </div>
-         </div>
-       </div>
-     </div>
-   </div>
+      </div>
+
+      <div>
+        <div class="right-panel">
+          <div id="inside-right-panel">
+            <div>
+              <span class="small" style="font-size:4vw;">Time</span>
+              <span class="val" style="font-size:4vw;color: #fff;" id="statTime">--:--:--</span>
+            </div>
+
+            <div class="input-row">
+              <input id="cityInput" type="text" placeholder="Enter city (e.g. Tokyo)" aria-label="City name" style="width: 15vw;"/>
+              <button id="cityBtn" title="Fetch weather">Go</button>
+            </div>
+
+            <div style="display: flex; justify-content: right; margin-top: 5px;">
+              <span class="val" id="Helpers" style="color: #fff; font-size: 2vw;">
+                with wttr.in & ipapi.co
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
