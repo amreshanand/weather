@@ -372,6 +372,8 @@
       requestAnimationFrame(() => {
         if (statLocation.scrollWidth >= statLocation.clientWidth) {
           statLocation.innerHTML = `<marquee>${head}</marquee>`;
+        } else {
+          statLocation.textContent = head;
         }
       });
       
