@@ -370,7 +370,7 @@
       const head = `${locationName}: ${condText}`;
       statLocation.textContent = head;
       requestAnimationFrame(() => {
-        if (statLocation.scrollWidth >= statLocation.clientWidth) {
+        if (statLocation.scrollWidth > statLocation.clientWidth) {
           statLocation.innerHTML = `<marquee>${head}</marquee>`;
         } else {
           statLocation.textContent = head;
