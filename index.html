@@ -367,7 +367,14 @@
       const tempFeelText = parts[13] || '—';
       const UVText = parts[14] || '—';
 
-      statLocation.textContent = `${locationName}: ${condText}`;
+      const head = `${locationName}: ${condText}`;
+      statLocation.textContent = head;
+      requestAnimationFrame(() => {
+        if (statLocation.scrollWidth >= statLocation.clientWidth) {
+          statLocation.innerHTML = `<marquee>${head}</marquee>`;
+        }
+      });
+      
       statTemp.textContent = `${tempText}(${tempFeelText})`;
       statPressure.textContent = pressureText;
       statHumidity.textContent = humidityText !== '—' ? (humidityText) : '—';
