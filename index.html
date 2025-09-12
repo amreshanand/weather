@@ -830,39 +830,122 @@
     ctx.save();
     ctx.globalAlpha = nightBlend;
 
+    const craters = [
+          { dx: -1, dy: -0.2, size: 0.5, color: "#cfcfcf" },
+          { dx:  -0.5, dy: -0.35, size: 0.25, color: "#cfcfcf" },
+          { dx: -0.15, dy: 0.05, size: 0.12, color: "#cfcfcf" },
+          { dx:  0, dy: -0.45, size: 0.2, color: "#cfcfcf" },
+          { dx: -0.58, dy: 0.25, size: 0.23, color: "#cfcfcf" },
+          { dx: -0.38, dy: 0, size: 0.08, color: "#eee" },
+          { dx: -0.23, dy: -0.1, size: 0.07, color: "#cfcfcf" },
+          { dx: 0, dy: 0, size: 0.07, color: "#cfcfcf" },
+          { dx:  -0.2, dy: 0.54, size: 0.18, color: "#cfcfcf" },
+          { dx: -0.43, dy: 0.55, size: 0.1, color: "#cfcfcf" },
+          { dx: -0.35, dy: 0.7, size: 0.1, color: "#cfcfcf" },
+          { dx: -0.25, dy: 0.32, size: 0.06, color: "#cfcfcf" },
+          { dx:  0.1, dy: 0.7, size: 0.18, color: "#eee" },
+          { dx:  0.3, dy: -0.4, size: 0.2, color: "#cfcfcf" },
+          { dx:  0.5, dy: -0.55, size: 0.15, color: "#cfcfcf" },
+          { dx:  0.3, dy: -0.6, size: 0.1, color: "#cfcfcf" },
+          { dx:  0.7, dy: -0.3, size: 0.1, color: "#cfcfcf" },
+        ];
+
     const p = Math.max(0, Math.min(1, moonPhase));
-    const baseGrad = ctx.createRadialGradient(cx - r * 0.18, cy - r * 0.12, r * 0.06, cx, cy, r);
-    baseGrad.addColorStop(0, '#ffffff');
+    
+    const illumination = 1-Math.abs(1-2*moonPhase);
+    const shadowIntensity = 1 - illumination;
+    const ellipseWidth = r * (shadowIntensity*2);
+        
+    const isWaxing = p <= 0.5;
+    
+    const baseGrad = ctx.createRadialGradient(
+        cx - r * 0.18, cy - r * 0.12, r * 0.06, 
+        cx, cy, r
+    );
+    baseGrad.addColorStop(0, '#f0f0f0');
     baseGrad.addColorStop(1, '#cfcfd1');
-    ctx.fillStyle = baseGrad;
-    ctx.beginPath();
-    ctx.arc(cx, cy, r, 0, Math.PI * 2);
-    ctx.fill();
-
-    const L = 0.5 * (1 - Math.cos(2 * Math.PI * p));
-    const side = (p <= 0.5) ? 1 : -1;
-
-    const maxOffset = r * 2.2;
-     const maskOffset = L * maxOffset;
 
     function getSkyColorApprox() {
-      if (mode === 'thunder') return '#151922';
-      if (mode === 'rain')    return '#151922';
-      if (mode === 'snow')    return '#E6F2FF';
-      if (mode === 'cloudy')  return isNight ? '#1E2633' : '#BBD2E1';
-      // clear
-      return isNight ? '#0b1020' : '#87CEEB';
-   }
+        if (mode === 'thunder') return '#151922';
+        if (mode === 'rain') return '#151922';
+        if (mode === 'snow') return '#E6F2FF';
+        if (mode === 'cloudy') return isNight ? '#1E2633' : '#BBD2E1';
+        return isNight ? '#0b1020' : '#87CEEB';
+    }
     const skyColor = getSkyColorApprox();
 
-    ctx.fillStyle = skyColor;
-    ctx.beginPath();
-    const maskR = r * 1.02;
-    ctx.arc(cx + side * maskOffset, cy, maskR, 0, Math.PI * 2);
-    ctx.fill();
+    if (illumination <= 0.01) {
+        ctx.fillStyle = skyColor;
+        ctx.beginPath();
+        ctx.arc(cx, cy, r, 0, Math.PI * 2);
+        ctx.fill();
+    } else if (illumination >= 0.99) {
+        ctx.fillStyle = baseGrad;
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(cx, cy, r, 0, Math.PI *2);
+        ctx.clip();
 
+
+        ctx.fillStyle = baseGrad;
+        ctx.fillRect(cx - r, cy - r, r * 2, r * 2);
+        
+        craters.forEach(c => {
+          const x = cx + c.dx * r;
+          const y = cy + c.dy * r;
+          const craterR = r * c.size;
+
+          ctx.fillStyle = c.color;
+          ctx.beginPath();
+          ctx.arc(x, y, craterR, 0, Math.PI * 2);
+          ctx.fill();
+        });
+
+        ctx.restore();
+        
+    } else{
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(cx, cy, r, 0, Math.PI *2);
+        ctx.clip();
+
+        ctx.fillStyle = baseGrad;
+        ctx.fillRect(cx - r, cy - r, r * 2, r * 2);
+
+        craters.forEach(c => {
+          const x = cx + c.dx * r;
+          const y = cy + c.dy * r;
+          const craterR = r * c.size;
+
+          ctx.fillStyle = c.color;
+          ctx.beginPath();
+          ctx.arc(x, y, craterR, 0, Math.PI * 2);
+          ctx.fill();
+        });
+
+        ctx.restore();
+        
+        let shadowOffsetX, shadowOffsetY, ShadowOffsetAngle;
+        if (isWaxing) {
+            shadowOffsetX = cx - r*0.9;
+            shadowOffsetY = cy - r/1.3;
+            ShadowOffsetAngle= Math.PI/4;
+        } else {
+            shadowOffsetX = cx + r*0.9;
+            shadowOffsetY = cy-r/1.3;
+            ShadowOffsetAngle= -Math.PI/4;
+            
+        }
+        if (shadowIntensity > 0.01) {
+            ctx.fillStyle = skyColor;
+            ctx.beginPath();
+            ctx.ellipse(shadowOffsetX, shadowOffsetY, ellipseWidth, r * 1.3, ShadowOffsetAngle, 0, Math.PI * 2);
+            ctx.fill();
+        }
+        ctx.restore();
+    }
     ctx.restore();
-  }
+           }
 
   function drawClouds(nowMs){
     clouds.forEach(c => {
