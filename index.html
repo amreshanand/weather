@@ -264,6 +264,10 @@
   // timing for frame-independent effects
   let lastTickMs = performance.now();
 
+  // wind
+  let windVel = 0;
+  let windDir = {'dx': 0, 'dy': 0};
+
 
   function resize(){
     DPR = Math.min(2, window.devicePixelRatio || 1);
@@ -369,6 +373,30 @@
       const tz = parts[12] || '';
       const tempFeelText = parts[13] || '—';
       const UVText = parts[14] || '—';
+
+      if (windText && windText !== "—") {
+        const arrow = windText[0];
+        const velMatch = windText.match(/(\d+(?:\.\d+)?)/);
+
+        if (velMatch) {
+          windVel = parseFloat(velMatch[1]);
+        }
+
+        const dirs = {
+          "↑": { dx: 0, dy: 1 },
+          "↓": { dx: 0, dy: -1 },
+          "→": { dx: 1, dy: 0 },
+          "←": { dx: -1, dy: 0 },
+          "↗": { dx: Math.SQRT1_2, dy: Math.SQRT1_2 },
+          "↘": { dx: Math.SQRT1_2, dy: -Math.SQRT1_2 },
+          "↙": { dx: -Math.SQRT1_2, dy: -Math.SQRT1_2 },
+          "↖": { dx: -Math.SQRT1_2, dy: Math.SQRT1_2 }
+        };
+
+        if (dirs[arrow]) {
+          windDir = dirs[arrow];
+        }
+      }
 
       const head = `${locationName}: ${condText}`;
       statLocation.textContent = head;
@@ -1020,7 +1048,11 @@
   function lerp(a,b,t){ return a + (b - a) * t; }
 
   function drawTrees(nowMs){
-    const windFactor = (mode === 'thunder') ? 1.8 : (mode === 'rain' ? 0.9 : 0.25);
+    const windCompX = windVel * windDir.dx;
+    let windFactor = 0.0663333 * windCompX + 0.05;
+    windFactor = Math.abs(windFactor);
+    windFactor = Math.min(windFactor, 20);
+
     for (let t of trees){
       const timeSec = nowMs * 0.001 * t.swaySpeed;
       const baseAmp = t.swayAmp;
