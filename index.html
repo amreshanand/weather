@@ -359,10 +359,11 @@
 
     try {
       const res = await fetch(url, { cache: 'no-store' });
+      const txt = (await res.text()) || "Error while fetching weather";
       if (!res.ok) {
+          alert("⚠️ "+txt+" - wttr.in");
           throw new Error('Fetch failed: ' + res.status);
       }
-      const txt = await res.text();
       if (txt.toLowerCase().includes("unknown location")){
         let temp = await fetch(url.split("?format=")[0], { cache: 'no-store' });
         temp = await temp.text();
