@@ -4,7 +4,8 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Weather Scenery</title>
- <link rel="icon" type="image/png" href="cropped_circle_image.png">
+  <link rel="icon" type="image/png" href="cropped_circle_image.png">
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
   <meta name="google-site-verification" content="8FKTyc03yLBS9rcNXZ2Qpm_7ytL4TvokgRCJfzBcz68"/>
   <style>
     html,body{
@@ -105,12 +106,12 @@
       font-size: 3vw;
       
     }
-
     .details-wrapper {
       display: flex;
       flex-direction: row;
       gap: 16px;
-      font-family: sans-serif;
+      font-size: 1vw;
+      font-family: 'Roboto', sans-serif;
     }
     .weather-ui .right-panel {
       width: 100%;
@@ -130,14 +131,15 @@
        height: fit-content;
        white-space: nowrap;
        overflow: hidden;
-       font-family:  'Times New Roman', Times, serif;
+       font-family: 'Oswald', sans-serif;
     }
     .weather-stats .val {
       font-weight:600;
     }
     .weather-ui .small {
-      font-size:3.2vw; 
-      color:#ddd; 
+      font-size:1vw; 
+      color:#ddd;
+      font-family: 'Roboto', sans-serif;
     }
     #cover{
       position: absolute;
@@ -197,8 +199,8 @@
       <div>
         <div class="right-panel">
           <div id="inside-right-panel">
-            <div style="font-size:4vw; font-family: sans-serif;">
-              <span class="small" style="">Time</span>
+            <div style="font-size:3vw; font-family: 'Roboto', sans-serif;">
+              <span class="small" style="font-size:3vw;">Time</span>
               <span class="val" style="color: #fff;" id="statTime">--:--:--</span>
             </div>
 
