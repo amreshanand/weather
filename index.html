@@ -331,7 +331,7 @@
       const city = info?.city?.trim();
       if (city) {
         currentQuery = city;
-        cityInput.placeholder = city;
+        cityInput.value = city;
         statLocation.textContent = `Detected: ${city}`;
       }
     } catch (err) {
@@ -361,8 +361,8 @@
         let temp = await fetch(url.split("?format=")[0], { cache: 'no-store' });
         temp = await temp.text();
         if (temp.toLowerCase().includes("sorry, we processed more than 1m requests today and we ran out of our datasource capacity.")){
-        alert("⚠️ Sorry, we processed more than 1M requests today and we ran out of our datasource capacity.\nWe hope to solve the problem as soon as possible, so you can enjoy your favourite weather service 24x365 even if it rains or snows.\nWe will solve the problem as soon as possible.");
-        throw new Error("Sorry, we processed more than 1M requests today and we ran out of our datasource capacity.\nWe hope to solve the problem as soon as possible, so you can enjoy your favourite weather service 24x365 even if it rains or snows.\nWe will solve the problem as soon as possible.");
+        alert("⚠️ Sorry, we processed more than 1M requests today and we ran out of our datasource capacity.\nWe hope to solve the problem as soon as possible, so you can enjoy your favourite weather service 24x365 even if it rains or snows.");
+        throw new Error("wttr.in: Sorry, we processed more than 1M requests today and we ran out of our datasource capacity.\nWe hope to solve the problem as soon as possible, so you can enjoy your favourite weather service 24x365 even if it rains or snows. - wttr.in");
         }
       }
       const line = txt.split('\n').find(l => l.trim().length > 0) || txt;
