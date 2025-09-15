@@ -689,7 +689,6 @@
     // slight vertical drift
     const vy = (Math.random() - 0.5) * 8;
     const vx = (fromLeft ? 1 : -1) * speed;
-    const ttl = 3000 + 3000 * (0.6 + depth); 
     const alphaBase = 0.45 + depth * 0.6; 
     const b = {
       x: startX,
@@ -699,8 +698,6 @@
       wingPhase: Math.random() * Math.PI * 2,
       flapSpeed,
       alpha: Math.min(1, alphaBase),
-      life: ttl,
-      ttl,
       flockId: flock,
       depth
     };
@@ -751,7 +748,6 @@
     const dtSec = dt / 1000;
     b.x += b.vx * dtSec;
     b.y += b.vy * dtSec;
-    b.life -= dt;
     b.wingPhase += dtSec * b.flapSpeed;
 
     // base alpha before fog/haze
@@ -807,7 +803,7 @@
     }
 
     // remove if offscreen or life ended
-    if (b.life <= 0 || b.x < -220 || b.x > window.innerWidth + 220 || b.y < -120 || b.y > window.innerHeight + 120) {
+    if (b.x < -220 || b.x > window.innerWidth + 220 || b.y < -120 || b.y > window.innerHeight + 120) {
       birds.splice(i, 1);
     }
   }
